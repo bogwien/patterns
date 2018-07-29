@@ -15,14 +15,17 @@ final class BusinessLogicTest extends TestCase
      * Тестируем что BusinessLogic::run() вызовет run() у BusinessTools и вернет его результат
      *
      * @dataProvider runResultProvider
-     * @param string $data
+     * @param string $expected
      */
-    public function testRun($data)
+    public function testRun($expected)
     {
-        $tools = $this->createMock('Patterns\DI\BusinessTools');
-        $tools->expects($this->once())->method('run')->willReturn($data);
-        $object = new BusinessLogic($tools);
-        $this->assertSame($data, $object->run());
+        $businessToolsMock = $this->createMock('Patterns\DI\BusinessTools');
+        $businessToolsMock->expects($this->once())->method('run')->willReturn($expected);
+
+        $businessLogic = new BusinessLogic($businessToolsMock);
+        $result = $businessLogic->run();
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
